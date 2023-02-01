@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 
 /**
@@ -8,57 +7,6 @@ import "./App.css";
  */
 
 export default function App() {
-  return (
-    <div >
-      <form id="ingredientsForm" onSubmit={onSubmit} className={styles.ingredientform}>
-        <div className={styles.format}>
-          {ingredients
-            .filter((ingredient) => ingredient.value != null)
-            .map((ingredient) => (
-              <div key={ingredient.id} className={styles.container}>
-                <input
-                  type="text"
-                  placeholder="Enter an Ingredient"
-                  defaultValue={ingredient.value}
-                  onChange={(e) => onChange(e, ingredient.id)}
-                  className={styles.ingredientform}
-                />
-
-                <button type="button" className={styles.deletebtn} onClick={() => deleteRow(ingredient.id)}>
-                  Remove</button>
-              </div>
-            ))}
-        </div>
-        <div>
-          <button type="button" onClick={addRow} className={styles.addbtn}>
-            Add Ingredient
-          </button>
-          <br />
-          <input type="submit" value="Generate Recipes" className={styles.generatebtn} />
-        </div>
-      </form>
-      <div> { isLoading ? <img src="https://media.tenor.com/JwPW0tw69vAAAAAi/cargando-loading.gif" className={styles.loading} /> :
-        <div>
-          <div id="title" className={styles.title}>{titleWords}</div>
-          <br />
-          <br />
-          
-          <div id="ingredients" className={styles.ingredients}>{ingredientWords}</div>
-          <br />
-          <br />
-          
-          <div id="instructions" className={styles.instructions}>{instructionWords}</div>
-      
-            {showImage ? <img src={imageUrl} alt="Recipe Image" className={styles.image} /> : null}
-        
-        </div>
-      }
-      </div>
-    </div>
-  );
-}
-
-export default function Home() {
   const [foodInput, setfoodInput] = useState("");
   const [titleWords, setTitleWords] = useState();
   const [ingredientWords, setIngredientWords] = useState();
@@ -117,3 +65,53 @@ export default function Home() {
       .join(","));
   };
 }
+  return (
+    <div >
+      <form id="ingredientsForm" onSubmit={onSubmit} className={styles.ingredientform}>
+        <div className={styles.format}>
+          {ingredients
+            .filter((ingredient) => ingredient.value != null)
+            .map((ingredient) => (
+              <div key={ingredient.id} className={styles.container}>
+                <input
+                  type="text"
+                  placeholder="Enter an Ingredient"
+                  defaultValue={ingredient.value}
+                  onChange={(e) => onChange(e, ingredient.id)}
+                  className={styles.ingredientform}
+                />
+
+                <button type="button" className={styles.deletebtn} onClick={() => deleteRow(ingredient.id)}>
+                  Remove</button>
+              </div>
+            ))}
+        </div>
+        <div>
+          <button type="button" onClick={addRow} className={styles.addbtn}>
+            Add Ingredient
+          </button>
+          <br />
+          <input type="submit" value="Generate Recipes" className={styles.generatebtn} />
+        </div>
+      </form>
+      <div> { isLoading ? <img src="https://media.tenor.com/JwPW0tw69vAAAAAi/cargando-loading.gif" className={styles.loading} /> :
+        <div>
+          <div id="title" className={styles.title}>{titleWords}</div>
+          <br />
+          <br />
+          
+          <div id="ingredients" className={styles.ingredients}>{ingredientWords}</div>
+          <br />
+          <br />
+          
+          <div id="instructions" className={styles.instructions}>{instructionWords}</div>
+      
+            {showImage ? <img src={imageUrl} alt="Recipe Image" className={styles.image} /> : null}
+        
+        </div>
+      }
+      </div>
+    </div>
+  );
+
+
