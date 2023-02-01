@@ -9,47 +9,111 @@ import "./App.css";
 
 export default function App() {
   return (
-    <div className="app min-h-screen text-blue-200 flex items-center flex-col p-20">
-      <div className="mb-10 grid grid-cols-4 grid-rows-2 w-1/2 mx-auto">
-        <img className="opacity-25" src={logo} alt="React Logo" width="300" />
-        <img
-          className="col-span-2 row-span-3 animate-spin m-auto"
-          style={{ animationDuration: "30s" }}
-          src={logo}
-          alt="React Logo"
-          width="300"
-        />
-        <img className="opacity-25" src={logo} alt="React Logo" width="300" />
-        <img className="opacity-25" src={logo} alt="React Logo" width="300" />
-        <img className="opacity-25" src={logo} alt="React Logo" width="300" />
-      </div>
+    <div >
+      <form id="ingredientsForm" onSubmit={onSubmit} className={styles.ingredientform}>
+        <div className={styles.format}>
+          {ingredients
+            .filter((ingredient) => ingredient.value != null)
+            .map((ingredient) => (
+              <div key={ingredient.id} className={styles.container}>
+                <input
+                  type="text"
+                  placeholder="Enter an Ingredient"
+                  defaultValue={ingredient.value}
+                  onChange={(e) => onChange(e, ingredient.id)}
+                  className={styles.ingredientform}
+                />
 
-      <h1 className="text-2xl lg:text-5xl mb-10 text-right">
-        Welcome to Your New React App{" "}
-        <span className="block text-lg text-blue-400">on DigitalOcean</span>
-      </h1>
-
-      <div className="grid grid-cols-2 grid-rows-2 gap-4">
-        <Button
-          text="DigitalOcean Docs"
-          url="https://www.digitalocean.com/docs/app-platform"
-        />
-        <Button
-          text="DigitalOcean Dashboard"
-          url="https://cloud.digitalocean.com/apps"
-        />
+                <button type="button" className={styles.deletebtn} onClick={() => deleteRow(ingredient.id)}>
+                  Remove</button>
+              </div>
+            ))}
+        </div>
+        <div>
+          <button type="button" onClick={addRow} className={styles.addbtn}>
+            Add Ingredient
+          </button>
+          <br />
+          <input type="submit" value="Generate Recipes" className={styles.generatebtn} />
+        </div>
+      </form>
+      <div> { isLoading ? <img src="https://media.tenor.com/JwPW0tw69vAAAAAi/cargando-loading.gif" className={styles.loading} /> :
+        <div>
+          <div id="title" className={styles.title}>{titleWords}</div>
+          <br />
+          <br />
+          
+          <div id="ingredients" className={styles.ingredients}>{ingredientWords}</div>
+          <br />
+          <br />
+          
+          <div id="instructions" className={styles.instructions}>{instructionWords}</div>
+      
+            {showImage ? <img src={imageUrl} alt="Recipe Image" className={styles.image} /> : null}
+        
+        </div>
+      }
       </div>
     </div>
   );
 }
 
-function Button({ className, text, url = "#" }) {
-  return (
-    <a
-      href={url}
-      className={`${className} py-3 px-6 bg-purple-400 hover:bg-purple-300 text-purple-800 hover:text-purple-900 block rounded text-center shadow flex items-center justify-center leading-snug text-xs transition ease-in duration-150`}
-    >
-      {text}
-    </a>
-  );
+export default function Home() {
+  const [foodInput, setfoodInput] = useState("");
+  const [titleWords, setTitleWords] = useState();
+  const [ingredientWords, setIngredientWords] = useState();
+  const [instructionWords, setInstructionWords] = useState();
+  const [imageUrl, setImageUrl] = useState();
+  const [ingredients, setIngredients] = useState([{ id: 1, value: "" }]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showImage, setShowImage] = useState(false);
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    setShowImage(true);
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ food: foodInput }),
+      });
+
+      const data = await response.json();
+      setIsLoading(false);
+      if (response.status !== 200) {
+        throw data.error || new Error(`Request failed with status ${response.status}`);
+      }
+      setTitleWords(data.titleWords);
+      setIngredientWords(data.ingredientWords)
+      setInstructionWords(data.instructionWords)
+      setImageUrl(data.imageUrl);
+      setfoodInput("");
+
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  }
+
+  const onChange = (e, id) => {
+    const newIngredients = [...ingredients];
+    const index = newIngredients.findIndex((i) => i.id === id);
+    newIngredients[index].value = e.target.value;
+    setIngredients(newIngredients);
+    setfoodInput(newIngredients.map((i) => i.value).join(","));
+  };
+
+  const addRow = () => {
+    setIngredients([...ingredients, { id: Date.now(), value: "" }]);
+  }
+
+  const deleteRow = (id) => {
+    setIngredients(ingredients.filter((ingredient) => ingredient.id !== id));
+    setfoodInput(ingredients.filter((ingredient) => ingredient.id !== id)
+      .map((i) => i.value)
+      .join(","));
+  };
 }

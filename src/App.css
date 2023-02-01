@@ -4,3 +4,99 @@
   background-color: #4286f4;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='12' viewBox='0 0 20 12'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='charlie-brown' fill='%233076e8' fill-opacity='0.4'%3E%3Cpath d='M9.8 12L0 2.2V.8l10 10 10-10v1.4L10.2 12h-.4zm-4 0L0 6.2V4.8L7.2 12H5.8zm8.4 0L20 6.2V4.8L12.8 12h1.4zM9.8 0l.2.2.2-.2h-.4zm-4 0L10 4.2 14.2 0h-1.4L10 2.8 7.2 0H5.8z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
+.ingredientform {
+  font-size: 16px;
+  margin: 10px 10px;
+  text-align: center;
+  display: grid;
+
+}
+.generatebtn:hover, .addbtn:hover, .deletebtn:hover {
+  background-color: green;
+  color: white;
+  transform: scale(1.1);
+}
+.deletebtn{
+  background-color: black;
+    color:white;
+    padding: 15px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border: black 4px;
+    margin: 10px auto;
+    display: block;
+    border: none;
+}
+.generatebtn, .addbtn {
+    background-color: black;
+    color:white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border: black 4px;
+    margin: 10px auto;
+    display: block;
+    border: none;
+}
+
+.container {
+  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.input {
+  flex: 1;
+}
+
+.title {
+  font-size: 60px;
+  text-align: left;
+  width:  auto;
+  font-style: Georgia;
+  padding-left: 100px;
+  padding-right: 100px;
+  font-weight: bold;
+}
+.ingredients {
+  font-size: 16px;
+  text-align: left;
+  width:  auto;
+  font-style: Georgia;
+  padding-left: 100px;
+  padding-right: 100px;
+  
+}
+.instructions {
+  font-size: 16px;
+  text-align: left;
+  width:  auto;
+  font-style: Georgia;
+  padding-left: 100px;
+  padding-right: 100px;
+}
+.format{
+  max-width: 200px;
+  text-align: center;
+  border: 1px black;
+  margin: auto;
+
+}
+.image{
+  padding-left: 100px;
+  border-radius: 8px;
+  display: inline-block;
+}
+.loading{
+  padding: auto;
+  border-radius: 8x;
+  size: 25%;
+  margin: 10px auto;
+  display: flex;
+
+}
