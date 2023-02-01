@@ -1,13 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 
-/**
- * Uses Tailwind CSS for styling
- * Tailwind file is imported in App.css
- */
-
 export default function App() {
-  const [foodInput, setfoodInput] = useState("");
+  const [foodInput, setFoodInput] = useState("");
   const [titleWords, setTitleWords] = useState();
   const [ingredientWords, setIngredientWords] = useState();
   const [instructionWords, setInstructionWords] = useState();
@@ -38,80 +33,89 @@ export default function App() {
       setIngredientWords(data.ingredientWords)
       setInstructionWords(data.instructionWords)
       setImageUrl(data.imageUrl);
-      setfoodInput("");
+      setFoodInput("");
 
     } catch (error) {
       console.error(error);
       alert(error.message);
     }
-  }
+  };
 
   const onChange = (e, id) => {
     const newIngredients = [...ingredients];
     const index = newIngredients.findIndex((i) => i.id === id);
     newIngredients[index].value = e.target.value;
     setIngredients(newIngredients);
-    setfoodInput(newIngredients.map((i) => i.value).join(","));
+    setFoodInput(newIngredients.map((i) => i.value).join(","));
   };
 
   const addRow = () => {
     setIngredients([...ingredients, { id: Date.now(), value: "" }]);
-  }
+  };
 
   const deleteRow = (id) => {
     setIngredients(ingredients.filter((ingredient) => ingredient.id !== id));
-    setfoodInput(ingredients.filter((ingredient) => ingredient.id !== id)
-      .map((i) => i.value)
-      .join(","));
+    setFoodInput(
+      ingredients
+        .filter((ingredient) => ingredient.id !== id)
+        .map((i) => i.value)
+        .join(",")
+    );
   };
-}
+
   return (
-    <div >
-      <form id="ingredientsForm" onSubmit={onSubmit} className={styles.ingredientform}>
-        <div className={styles.format}>
-          {ingredients
-            .filter((ingredient) => ingredient.value != null)
-            .map((ingredient) => (
-              <div key={ingredient.id} className={styles.container}>
-                <input
-                  type="text"
-                  placeholder="Enter an Ingredient"
-                  defaultValue={ingredient.value}
-                  onChange={(e) => onChange(e, ingredient.id)}
-                  className={styles.ingredientform}
-                />
+   <div>
+  <form id="ingredientsForm" onSubmit={onSubmit} className={styles.ingredientform}>
+    <div className={styles.format}>
+      {ingredients
+        .filter((ingredient) => ingredient.value)
+        .map((ingredient) => (
+          <div key={ingredient.id} className={styles.container}>
+            <input
+              type="text"
+              placeholder="Enter an Ingredient"
+              value={ingredient.value}
+              onChange={(e) => onChange(e, ingredient.id)}
+              className={styles.ingredientform}
+            />
 
-                <button type="button" className={styles.deletebtn} onClick={() => deleteRow(ingredient.id)}>
-                  Remove</button>
-              </div>
-            ))}
-        </div>
-        <div>
-          <button type="button" onClick={addRow} className={styles.addbtn}>
-            Add Ingredient
-          </button>
-          <br />
-          <input type="submit" value="Generate Recipes" className={styles.generatebtn} />
-        </div>
-      </form>
-      <div> { isLoading ? <img src="https://media.tenor.com/JwPW0tw69vAAAAAi/cargando-loading.gif" className={styles.loading} /> :
-        <div>
-          <div id="title" className={styles.title}>{titleWords}</div>
-          <br />
-          <br />
-          
-          <div id="ingredients" className={styles.ingredients}>{ingredientWords}</div>
-          <br />
-          <br />
-          
-          <div id="instructions" className={styles.instructions}>{instructionWords}</div>
-      
-            {showImage ? <img src={imageUrl} alt="Recipe Image" className={styles.image} /> : null}
-        
-        </div>
-      }
-      </div>
+            <button type="button" className={styles.deletebtn} onClick={() => deleteRow(ingredient.id)}>
+              Remove
+            </button>
+          </div>
+        ))}
     </div>
-  );
+    <div>
+      <button type="button" onClick={addRow} className={styles.addbtn}>
+        Add Ingredient
+      </button>
+      <br />
+      <input type="submit" value="Generate Recipes" className={styles.generatebtn} />
+    </div>
+  </form>
+  <div>
+    {isLoading ? (
+      <img
+        src="https://media.tenor.com/JwPW0tw69vAAAAAi/cargando-loading.gif"
+        className={styles.loading}
+        alt="Loading"
+      />
+    ) : (
+      <div>
+        <div id="title" className={styles.title}>{titleWords}</div>
+        <br />
+        <br />
 
+        <div id="ingredients" className={styles.ingredients}>{ingredientWords}</div>
+        <br />
+        <br />
 
+        <div id="instructions" className={styles.instructions}>{instructionWords}</div>
+
+        {showImage ? <img src={imageUrl} alt="Recipe Image" className={styles.image} /> : null}
+      </div>
+    )}
+  </div>
+</div>
+  )
+    }
